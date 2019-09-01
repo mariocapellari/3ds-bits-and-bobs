@@ -2,6 +2,7 @@
      Scaffolding to built out DVS Auto Loader for 3ds Max
      
      This will create a "DVS" Pulldown menu with a dummy action item entry
+     
 '''
 import MaxPlus
 
