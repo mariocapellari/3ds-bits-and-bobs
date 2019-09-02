@@ -1,11 +1,10 @@
 '''
      Scaffolding to built out DVS Auto Loader for 3ds Max
-     
-     This will create a "DVS" Pulldown menu with a dummy action item entry
-     
 '''
 import MaxPlus
-
+import sys
+sys.path.append('Q:\\Shared drives\\DVS_Production\\Software\\DVS\\3DSMax\\python\\')
+#sys.path.append('Q:\Shared drives\DVS_Production\Software\\DVS\3DSMax\python')
 
 def outputMenuItem(item, recurse=True, indent=''):
     text = item.GetTitle()
@@ -28,6 +27,17 @@ def doSomething():
 
 action = MaxPlus.ActionFactory.Create(
     'Do something', 'Python demos', doSomething)
+    
+def doUI_Test():
+    print 'This is create_DVS_Menu calling UI_Test'
+    import UI_Test
+    print dir(UI_Test)
+    UI_Test.main()
+    #~ print sys.path[-1]
+    
+action = MaxPlus.ActionFactory.Create(
+    'Do something', 'UI_Test.py', doUI_Test)
+    
 
 
 def createTestMenu(name):
@@ -47,7 +57,7 @@ def createTestMenu(name):
 
 def getLastMenuItem(menu=MaxPlus.MenuManager.GetMainMenu()):
     return list(menu.Items)[-1]
-	
+    
 
 
 def testLastItem(text):
