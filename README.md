@@ -1,2 +1,2 @@
-# 3ds-bits-and-bobs
+# 3ds-bitsandbobs
 code snippets and ideas for 3ds max
