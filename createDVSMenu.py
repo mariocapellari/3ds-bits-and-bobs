@@ -1,12 +1,13 @@
-'''
-     Demonstrates the menu manager API.
-'''
-import MaxPlus
+"""
+     Use the menu manager API to create the DVS Menu and items for 3DS Max
+"""
+
+import MaxPlus, os
 
 
 def outputMenuItem(item, recurse=True, indent=''):
     text = item.GetTitle()
-    print indent, text if text else "----"
+    print(indent, text) if text else "----"
     if item.HasSubMenu and recurse:
         outputMenu(item.SubMenu, recurse, indent + '   ')
 
@@ -15,31 +16,42 @@ def outputMenu(menu, recurse=True, indent=''):
     for i in menu.Items:
         outputMenuItem(i, recurse, indent)
 
+
 somethingHappened = False
 
 
 def doSomething():
     global somethingHappened
     somethingHappened = True
-    print 'Something happened'
-
-action = MaxPlus.ActionFactory.Create(
-    'Do something', 'Python demos', doSomething)
+    print ('Something happened')
 
 
-def createTestMenu(name):
+action = MaxPlus.ActionFactory.Create('Do something', 'Python demos', doSomething)
+action01 = MaxPlus.ActionFactory.Create('category', 'name', doSomething)
+
+dvstools = "Q:\Shared drives\DVS_Production\Platform_Tools\Current\maxscript"
+
+def readInFileList(dvstools):
+    print("I am readInFiles")
+    fileList = os.listdir(dvstools)
+    print(fileList)
+
+
+def createDVSMenu(name):
     if not MaxPlus.MenuManager.MenuExists(name):
+        readInFileList(dvstools) # call reader
+
         mb = MaxPlus.MenuBuilder(name)
         if action._IsValidWrapper():
-            print "Created action"
+            print ("Created action")
         else:
-            print "Failed to create action"
+            print ("Failed to create action")
         mb.AddItem(action)
         mb.AddSeparator()
         menu = mb.Create(MaxPlus.MenuManager.GetMainMenu())
-        print 'menu created', menu.Title
+        print ('menu created', menu.Title)
     else:
-        print 'The menu ', name, ' already exists'
+        print ('The menu ', name, ' already exists')
 
 
 def getLastMenuItem(menu=MaxPlus.MenuManager.GetMainMenu()):
@@ -51,17 +63,17 @@ def testLastItem(text):
 
 
 def main():
-    print "Removing any previously left 'menu items'"
-    MaxPlus.MenuManager.UnregisterMenu(u"Test")
+    # print ("Removing any previously left DVS 'menu items'")
+    MaxPlus.MenuManager.UnregisterMenu(u"DVS")
 
-    print "Creating a new menu"
-    testLastItem(u"&Help")
-    outputMenu(MaxPlus.MenuManager.GetMainMenu(), False)
+    # print ("Creating a new menu")
+    # testLastItem(u"&Help")
+    # outputMenu(MaxPlus.MenuManager.GetMainMenu(), False)
 
-    print "Creating a new menu"
-    createTestMenu(u"Test")
-    outputMenu(MaxPlus.MenuManager.GetMainMenu(), False)
-    testLastItem(u"Test")
+    print ("Creating a DVS menu")
+    createDVSMenu(u"DVS")
+    # outputMenu(MaxPlus.MenuManager.GetMainMenu(), False)
+    testLastItem(u"DVS")
 
     assert(not somethingHappened)
     mi = getLastMenuItem()
@@ -69,11 +81,6 @@ def main():
     ai = mi.ActionItem
     ai.Execute()
     assert(somethingHappened)
-
-    #print "Unregistering the 'test' menu"
-    #MaxPlus.MenuManager.UnregisterMenu(u"Test")
-    #outputMenu(MaxPlus.MenuManager.GetMainMenu(), False)
-    #testLastItem(u"&Help")
 
 if __name__ == '__main__':
     main()
